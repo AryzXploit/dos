@@ -44,7 +44,15 @@
     }
 
     .address-bar {
-  height: 52px; /* ukuran address bar HP normal */
+  position: fixed;
+  top: 6px;       /* geser turun 6px dari atas layar */
+  left: 0;
+  width: 100%;
+  height: 52px;   /* address bar lebih kecil */
+  z-index: 9999;
+  object-fit: contain;
+  display: block;
+  border-bottom: 1px solid #ccc;
 }
 
 .login-container {
